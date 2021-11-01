@@ -1,0 +1,26 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    font-family: sans-serif;
+    box-sizing: border-box;
+}
+
+#root {
+    display: flex;
+    justify-content: center;
+}
+
+.App {
+    width: 80%;
+
+}
+
+.post {
+    display: flex;
+    padding: 1em;
+    margin-top: 1em;
+    border: 1px solid teal;
+    justify-content: space-between;
+    align-items: center;
+}

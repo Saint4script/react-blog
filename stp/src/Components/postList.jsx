@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import Post_ from './post_'
+import React from 'react';
+import Post from './post'
 
 const PostList = ({posts, title}) => {
     
@@ -9,7 +9,7 @@ const PostList = ({posts, title}) => {
         <h2 style={{textAlign: "center"}}>{title}</h2>
         {
             posts.map(
-                (post) => <Post_ post_={post} key={post.id}/>
+                (post) => <Post post={post} key={post.id}/>
             )
         }
     </div>
