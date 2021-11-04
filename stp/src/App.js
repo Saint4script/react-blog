@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PostList from './Components/postList'
-import MyButton from './Components/UI/Button/MyButton';
-import MyInput from './Components/UI/Input/MyInput';
+import PostForm from './Components/postForm'
 // common styles
 import styles from './styles/app.css';
+import MySelect from './Components/UI/Select/mySelect';
 
 // async function getPosts() {
 //     fetch('http://127.0.0.1:3090/posts', {
@@ -24,67 +24,49 @@ function App() {
 
     const [posts, setPosts] = useState(
         [
-            {id: 1, title: "Some title 1", author: "Bob Rock", pubDate: "12-31-2021", shortText: "lalala lololo olalaoapsakjdsad rollo go go go..."},
-            {id: 2, title: "Some title 2", author: "Bob Rock", pubDate: "12-31-2021", shortText: "lalala lololo olalaoapsakjdsad rollo go go go..."},
-            {id: 3, title: "Some title 3", author: "Bob Rock", pubDate: "12-31-2021", shortText: "lalala lololo olalaoapsakjdsad rollo go go go..."},
+            {id: 1, title: "errrrrr", author: "Bob Rockrr", pubDate: "11-31-2021", shortText: "lalala lololo olalaoapsakjdsad rollo go go go..."},
+            {id: 2, title: "aaaaa", author: "Bob Rockas", pubDate: "12-31-2021", shortText: "lalala lololo olalaoapsakjdsad rollo go go go..."},
+            {id: 3, title: "aome title 3 bobs", author: "Bob Rocky", pubDate: "9-31-2021", shortText: "lalala lololo olalaoapsakjdsad rollo go go go..."},
         ]
     );
 
-    const[post, setPost] = useState({
-            title: '',
-            author: '',
-            postText: '',
-            shortText: '',
-    });
+    const [selectedSort, setSelectedSort] = useState('')
 
-    const addNewPost = (e) => {
-        e.preventDefault();
-        // oooouf, some *** date magic ***
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0');
-        var yyyy = today.getFullYear();
-        today = mm + '-' + dd + '-' + yyyy;
-
-        setPosts([...posts, {...post, id: Date.now(), pubDate: today,}]);
-        setPost({
-            title: '',
-            author: '',
-            postText: '',
-            shortText: '',
-        });
+    const sortPosts = sort => {
+        setSelectedSort(sort);
+        setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort])));
     }
+
+    const createPost = (newPost) => {
+        setPosts([...posts, newPost]);
+    }
+
+    const removePost = (delPost) => {
+        setPosts(posts.filter(p => p.id !== delPost.id));
+    }
+    
 
     return (
         <div className="App">
-            <form>
-                <MyInput
-                    value={post.title}
-                    onChange={(e) => setPost({...post, title: e.target.value})}
-                    type="text" 
-                    placeholder="Заголовок поста"
-                ></MyInput>
-                <MyInput 
-                    value={post.author}
-                    onChange={(e) => setPost({...post, author: e.target.value})}
-                    type="text" 
-                    placeholder="Автор">
-                </MyInput>
-                <MyInput 
-                    value={post.postText}
-                    onChange={(e) => setPost({...post, postText: e.target.value})}
-                    type="text" 
-                    placeholder="Текст поста">
-                </MyInput>
-                <MyInput 
-                    value={post.shortText}
-                    onChange={(e) => setPost({...post, shortText: e.target.value})}
-                    type="text" 
-                    placeholder="Краткий текст">
-                </MyInput>
-                <MyButton onClick={addNewPost}>Создать</MyButton>
-            </form>
-            <PostList posts={posts} title="Все публикции"/>
+            <PostForm create={createPost} />
+            <div>
+                <MySelect 
+                    value={selectedSort}
+                    onChange={sortPosts}
+                    options={[
+                        {value: "pubDate", name: "Дата публикации"},
+                        {value: "title", name: "Заголовок"},
+                    ]} 
+                    defaultOption="Сортировка"
+                />
+            </div>
+
+            {
+                posts.length !== 0
+                ? <PostList remove={removePost} posts={posts} title="Все публикции"/>
+                : <h1>Публикации не найдены!</h1>
+            }
+            
         </div>
     );
 }

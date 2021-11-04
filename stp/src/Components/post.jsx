@@ -16,7 +16,7 @@ const Post = (props) => {
             <p>{props.post.postText}</p>
         </div>
         
-        <MyButton onClick={() => {alert('deleted!')}}>delete</MyButton>
+        <MyButton onClick={() => props.remove(props.post)}>remove</MyButton>
     </div>
   );
 }
