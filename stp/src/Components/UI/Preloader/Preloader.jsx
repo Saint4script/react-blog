@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classes from './Preloader.module.css'
 
 const Preloader = (props) => {
