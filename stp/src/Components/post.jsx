@@ -7,13 +7,9 @@ const Post = (props) => {
   return (
     <div className="post">
         <h3>{props.post.title}</h3>
-        <span>{props.post.author}</span>
-        <span>{props.post.pubDate}</span>
-        <div className="short-text">
-            <p>{props.post.shortText}</p>
-        </div>
-        <div className="postText">
-            <p>{props.post.postText}</p>
+        <span>{props.post.user_id}</span>
+        <div className="body">
+            <p>{props.post.body}</p>
         </div>
         
         <MyButton onClick={() => props.remove(props.post)}>remove</MyButton>

@@ -1,9 +1,20 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState, useEffect, } from 'react';
 import PostList from './Components/postList'
 import PostForm from './Components/postForm'
+
 // common styles
 import styles from './styles/app.css';
-import MySelect from './Components/UI/Select/mySelect';
+
+
+import SearchInput from './Components/UI/SearchInput/SearchInput';
+
+import PostFilter from './Components/UI/PostFilter/PostFilter';
+import SearchModal from './Components/UI/SearchModal/SearchModal';
+import MyButton from './Components/UI/Button/MyButton';
+import { usePosts } from './hooks/usePosts';
+import PostService from './API/PostService';
+import Preloader from './Components/UI/Preloader/Preloader';
+import { useFetching } from './hooks/useFetching';
 
 // async function getPosts() {
 //     fetch('http://127.0.0.1:3090/posts', {
@@ -22,51 +33,57 @@ import MySelect from './Components/UI/Select/mySelect';
 
 function App() {
 
-    const [posts, setPosts] = useState(
-        [
-            {id: 1, title: "errrrrr", author: "Bob Rockrr", pubDate: "11-31-2021", shortText: "lalala lololo olalaoapsakjdsad rollo go go go..."},
-            {id: 2, title: "aaaaa", author: "Bob Rockas", pubDate: "12-31-2021", shortText: "lalala lololo olalaoapsakjdsad rollo go go go..."},
-            {id: 3, title: "aome title 3 bobs", author: "Bob Rocky", pubDate: "9-31-2021", shortText: "lalala lololo olalaoapsakjdsad rollo go go go..."},
-        ]
-    );
+    const [posts, setPosts] = useState([]);
+    const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
+        const posts = await PostService.getAll();
+        setPosts(posts);
+    })
 
-    const [selectedSort, setSelectedSort] = useState('')
+    useEffect(() => {
+        fetchPosts();
+    }, [])
 
-    const sortPosts = sort => {
-        setSelectedSort(sort);
-        setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort])));
-    }
+    const [filter, setFilter] = useState({
+        sort: '', 
+        query: '',
+    })
+    const [modal, setModal] = useState(false);
+    const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
 
     const createPost = (newPost) => {
         setPosts([...posts, newPost]);
+        setModal(false);
     }
 
     const removePost = (delPost) => {
         setPosts(posts.filter(p => p.id !== delPost.id));
     }
-    
 
     return (
         <div className="App">
-            <PostForm create={createPost} />
-            <div>
-                <MySelect 
-                    value={selectedSort}
-                    onChange={sortPosts}
-                    options={[
-                        {value: "pubDate", name: "Дата публикации"},
-                        {value: "title", name: "Заголовок"},
-                    ]} 
-                    defaultOption="Сортировка"
-                />
-            </div>
+
+            <MyButton onClick={fetchPosts}>POSTS</MyButton>
+            <MyButton onClick={() => setModal(true)}>
+                Создать публикацию
+            </MyButton>
+            <PostFilter
+                filter={filter}
+                setFilter={setFilter}
+            />
+            <SearchModal visible={modal} setVisible={setModal}>
+                <PostForm create={createPost} />
+            </SearchModal>
 
             {
-                posts.length !== 0
-                ? <PostList remove={removePost} posts={posts} title="Все публикции"/>
-                : <h1>Публикации не найдены!</h1>
+                postError &&
+                <h1>Возникла ошибка при попытке получить список публикаций: ${postError}</h1>
             }
-            
+
+            {
+                isPostsLoading
+                ? <Preloader/>
+                : <PostList remove={removePost} posts={sortedAndSearchedPosts} title="Все публикции"/>
+            }
         </div>
     );
 }
