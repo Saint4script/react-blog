@@ -18,11 +18,28 @@
 
 .post {
     display: flex;
-    padding: 1em;
+    padding: 0 1em;
     margin-top: 1em;
     border: 1px solid teal;
     justify-content: space-between;
     align-items: center;
+}
+
+.post-header {
+    display: block;
+    padding: 1em;
+    flex: 1;
+    border-right: 1px solid teal;
+}
+
+.post-user-id {
+    display: none;
+}
+
+.post-body {
+    flex: 3;
+    padding: 1em;
+    overflow: hidden;
 }
 
 

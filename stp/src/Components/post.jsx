@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import MyButton from './UI/Button/MyButton';
 
 const Post = (props) => {
@@ -6,9 +6,9 @@ const Post = (props) => {
 
   return (
     <div className="post">
-        <h3>{props.post.title}</h3>
-        <span>{props.post.user_id}</span>
-        <div className="body">
+        <h3 className="post-header">{props.post.title}</h3>
+        <span className="post-user-id">{props.post.user_id}</span>
+        <div className="post-body">
             <p>{props.post.body}</p>
         </div>
         

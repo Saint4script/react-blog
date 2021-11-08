@@ -1,5 +1,3 @@
-import React from 'react';
-
 import cl from "./SearchModal.module.css"
 
 const SearchModal = ({children, visible, setVisible}) => {

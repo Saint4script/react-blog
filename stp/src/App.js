@@ -1,12 +1,9 @@
-import React, { useMemo, useState, useEffect, } from 'react';
+import React, { useState, useEffect, } from 'react';
 import PostList from './Components/postList'
 import PostForm from './Components/postForm'
 
 // common styles
 import styles from './styles/app.css';
-
-
-import SearchInput from './Components/UI/SearchInput/SearchInput';
 
 import PostFilter from './Components/UI/PostFilter/PostFilter';
 import SearchModal from './Components/UI/SearchModal/SearchModal';
@@ -26,37 +23,20 @@ function App() {
 
     const [page, setPage] = useState(1);
 
-    const totalPagesCount = useMemo(() => {
-        return pagesCount;
-    }, [pagesCount]);
-
-    const usePagination = useMemo(() => {
-        for(let i = 1; i <= totalPagesCount; i++) {
-            pagesArray.push(i);
-        }
-    }, [totalPagesCount])
-
     useEffect(() => {
         fetchPosts();
-    }, [pagesCount])
+    }, [page])
     
     const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
         const response = await PostService.getAll(page);
-        // console.log(response.data.meta.pagination.pages)
         const currentPagesCount = response.data.meta.pagination.pages;
 
         if(currentPagesCount !== pagesCount) {
-            setPagesCount(currentPagesCount); //потом они изменятся
+            setPagesCount(currentPagesCount);
         }
         setPosts(response.data.data);
     })
-    
-    // const [users, setUsers] = useState([
-    //     {id: "23", name="Abdulla ibn Daud"},
-    //     {id: "1", name="Jesus Christi"}
-    // ])
 
-    
 
     const [filter, setFilter] = useState({
         sort: '', 
@@ -89,14 +69,6 @@ function App() {
                 <PostForm create={createPost} />
             </SearchModal>
 
-            {/* <div>
-                {
-                    users.map((user) => 
-                            <User remove={remove} user={user} key={user.id}/>
-                    )
-                }
-            </div> */}
-
             {
                 postError &&
                 <h1>Возникла ошибка при попытке получить список публикаций: ${postError}</h1>
@@ -109,9 +81,7 @@ function App() {
             }
 
             {
-                isPostsLoading
-                ? <Preloader/>
-                : <Pagination pagesArray={pagesArray} pagesCount={pagesCount}/>
+                <Pagination pagesArray={pagesArray} pagesCount={pagesCount} curPage={page} setPage={setPage}/>
             }
         </div>
     );

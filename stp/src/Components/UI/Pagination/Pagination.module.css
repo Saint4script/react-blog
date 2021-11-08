@@ -1,0 +1,33 @@
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    overflow-x: scroll;
+    margin-top: 3em;
+    margin-bottom: 3em;
+}
+
+.page {
+    padding: 4px 0px;
+    border: 2px solid teal;
+    margin-left: 2px;
+    margin-right: 2px;
+    flex: 1 0 36px;
+    text-align: center;
+}
+
+.page:hover {
+    cursor: pointer;
+}
+
+.page:first-child {
+    margin-left: 0;
+}
+
+.page:last-child {
+    margin-right: 0;
+}
+
+.page__current {
+    background-color: teal;
+}
+

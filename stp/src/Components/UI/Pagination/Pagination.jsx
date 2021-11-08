@@ -1,9 +1,6 @@
-import React, {useMemo} from 'react';
-
-import MyButton from '../Button/MyButton';
 import cl from "./Pagination.module.css"
 
-const Pagination = ({pagesCount}) => {
+const Pagination = ({pagesCount, curPage, setPage}) => {
 
     let pagesArray = [];
     for (let i = 1; i <= pagesCount; i++){
@@ -11,9 +8,14 @@ const Pagination = ({pagesCount}) => {
     }
 
   return (
-        <div>
+        <div className={cl.wrapper}>
            {
-                pagesArray.map(pageNumber => <MyButton key={pageNumber}>{pageNumber}</MyButton>)
+                pagesArray.map(pageNumber => 
+                    <div 
+                        key={pageNumber}
+                        className={curPage === pageNumber ? [cl.page__current, cl.page].join(' ') : cl.page}
+                        onClick={e => setPage(pageNumber)}
+                    >{pageNumber}</div>)
            }
         </div>
   );

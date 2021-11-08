@@ -1,5 +1,3 @@
-import React from 'react';
-
 const MySelect = ({options, defaultOption, value, onChange}) => {
   return (
     <select

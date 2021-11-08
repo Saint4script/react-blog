@@ -1,5 +1,3 @@
-import React from 'react';
-
 import MyInput from '../Input/MyInput';
 import MySelect from '../Select/mySelect';
 
